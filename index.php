@@ -39,14 +39,16 @@
             $game = new Game("---------");
         }
 
+        $game->pick_move();
+        
         $game->display();
 
         if ($game->winner('x')) 
         {
-            echo '"x" win.';
+            echo 'You Lose';
         } else if ($game->winner('o'))
         {
-            echo '"o" win.';
+            echo 'You Win.';
         } else 
         {
             echo 'No winner yet.';
@@ -133,6 +135,27 @@
           $link = '/comp4711/index.php/?board='.$move; // this is what we want the link to be
           // so return a cell containing an anchor and showing a hyphen
           return '<td><a href="'.$link.'">-</a></td>';
+        }
+        
+        function pick_move()
+        {
+            $temp = array();
+            if(!$this->winner('x') || !$this->winner('o'))
+            {
+                for($i = 0; $i < count($this->position); $i++)
+                {
+                    if($this->position[$i] == '-')
+                    {
+                        array_push($temp, $i);
+                    }
+                }
+                if(count($temp) > 1)
+                {
+                    $tempSize = count($temp);
+                    $val = $temp[rand(0, $tempSize-1)];
+                    $this->position[$val] = 'x';
+                }
+            }
         }
     }    
 ?>
