@@ -31,13 +31,15 @@
         if (isset($_GET['board']))
         {
             $position = $_GET['board'];
-            $squares = str_split($position);
+            //$squares = str_split($position);
         }
 
-        if (winner('x',$squares)) 
+        $game = new Game($position);
+        
+        if ($game->winner('x')) 
         {
             echo '"x" win.';
-        } else if (winner('o',$squares))
+        } else if ($game->winner('o'))
         {
             echo '"o" win.';
         } else 
@@ -51,38 +53,47 @@
     
 <?php
     
-    function winner($token,$position) 
+    class Game
     {
-        $won = false;
+        var $position;
         
-        
-        for($row=0; $row<3; $row++)
+        function __construct($squares)
         {
-            if (($position[3*$row] == $token) && 
-                ($position[3*$row+1] == $token) && 
-                ($position[3*$row+2] == $token))
-            {
-                $won = true;
-            } else if (($position[$row] == $token) && 
-                ($position[$row+3] == $token) && 
-                ($position[$row+6] == $token))
-            {
-                $won = true;
-            }   
+            $this->position = str_split($squares);
         }
         
-        if (($position[0] == $token) &&
-            ($position[5] == $token) &&
-            ($position[8] == $token)) 
+        public function winner($token) 
         {
-            $won = true;
-        } else if (($position[2] == $token) &&
-                   ($position[5] == $token) &&
-                   ($position[6] == $token)) 
-        {
-            $won = true;
+            $won = false;
+            
+            for($row=0; $row<3; $row++)
+            {
+                if (($this->position[3*$row] == $token) && 
+                    ($this->position[3*$row+1] == $token) && 
+                    ($this->position[3*$row+2] == $token))
+                {
+                    $won = true;
+                } else if (($this->position[$row] == $token) && 
+                    ($this->position[$row+3] == $token) && 
+                    ($this->position[$row+6] == $token))
+                {
+                    $won = true;
+                }   
+            }
+
+            if (($this->position[0] == $token) &&
+                ($this->position[5] == $token) &&
+                ($this->position[8] == $token)) 
+            {
+                $won = true;
+            } else if (($this->position[2] == $token) &&
+                       ($this->position[5] == $token) &&
+                       ($this->position[6] == $token)) 
+            {
+                $won = true;
+            }
+
+            return $won;
         }
-        
-        return $won;
-    }
+    }    
 ?>
